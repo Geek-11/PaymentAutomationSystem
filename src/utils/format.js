@@ -1,4 +1,6 @@
 export const formatCurrency = (amount) => {
+  console.log(amount);
+  
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',

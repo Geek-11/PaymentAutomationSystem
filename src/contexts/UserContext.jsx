@@ -28,6 +28,7 @@ export const UserProvider = ({ children }) => {
           id: doc.id,
           ...doc.data()
         }));
+        console.log(fetchedMentors);
         setMentors(fetchedMentors);
         
         // Fetch all users

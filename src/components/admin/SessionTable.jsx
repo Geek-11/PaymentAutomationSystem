@@ -4,6 +4,8 @@ import DateRangePicker from '@/components/common/DateRangePicker';
 import Button from '@/components/common/Button';
 import Badge from '@/components/common/Badge';
 import { formatDate, formatTime, formatDuration, formatCurrency } from '@/utils/format';
+import { useUser } from '@/hooks/useUser';
+import { BASE_RATES } from '@/types/user';
 
 const SessionTable = ({ 
   sessions, 
@@ -19,6 +21,7 @@ const SessionTable = ({
     to: null
   });
   const [showFilters, setShowFilters] = useState(false);
+  const { mentors } = useUser();
   
   // Filter sessions based on search, type and date range
   const filteredSessions = sessions.filter(session => {
@@ -145,15 +148,19 @@ const SessionTable = ({
                       {session.type.charAt(0).toUpperCase() + session.type.slice(1)}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 text-sm flex items-center">
-                    <Calendar size={14} className="text-gray-400 mr-1" />
-                    {formatDate(session.date)}
+                  <td className="px-4 py-3 text-sm">
+                    <div className='flex items-center'>
+                      <Calendar size={14} className="text-gray-400 mr-1" />
+                      {formatDate(session.date)}
+                    </div>
                   </td>
-                  <td className="px-4 py-3 text-sm flex items-center">
-                    <Clock size={14} className="text-gray-400 mr-1" />
-                    {formatDuration(session.duration)}
+                  <td className="px-4 py-3 text-sm">
+                    <div className='flex items-center'>
+                      <Clock size={14} className="text-gray-400 mr-1" />
+                      {formatDuration(session.duration)}
+                    </div>
                   </td>
-                  <td className="px-4 py-3 text-sm">{formatCurrency(session.amount)}/hr</td>
+                  <td className="px-4 py-3 text-sm">{formatCurrency(BASE_RATES[mentors.find(mentor => (mentor.id === session.userId)).mentorType])}/hr</td>
                   <td className="px-4 py-3 text-sm font-medium">
                     {formatCurrency(session.amount)}
                   </td>

@@ -46,14 +46,13 @@ const Sessions = () => {
   const handleEditSession = (session) => {
     setCurrentSession(session);
     setIsModalOpen(true);
-    console.log(currentSession);
     
   };
   
   const handleSaveSession = async (session) => {
     try {
       if (currentSession) {
-        console.log('if ran: edit', currentSession);
+        console.log(currentSession);
         
         const sessionRef = doc(db, 'sessions', currentSession.id);
         await updateDoc(sessionRef, session);

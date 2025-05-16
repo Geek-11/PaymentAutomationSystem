@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import Button from '@/components/common/Button';
+import { BASE_RATES } from '@/types/user';
 
 const SessionForm = ({ session, onSave, onCancel }) => {
   const [mentors, setMentors] = useState([]);
@@ -17,6 +18,7 @@ const SessionForm = ({ session, onSave, onCancel }) => {
     amount: 0,
     notes: ''
   });
+  
   
   useEffect(() => {
     const fetchMentors = async () => {
@@ -39,12 +41,8 @@ const SessionForm = ({ session, onSave, onCancel }) => {
     fetchMentors();
   }, []);
   
-  useEffect(() => {
-    console.log('effect ran', session);
-    
-    if (session) {
-      console.log('edit mode', session);
-      
+  useEffect(() => {    
+    if (session) {      
       const sessionDate = new Date(session.date);
       const formattedDate = sessionDate.toISOString().split('T')[0];
       
@@ -53,7 +51,6 @@ const SessionForm = ({ session, onSave, onCancel }) => {
         date: formattedDate
       });
     } else {
-      console.log('new mode');
       const today = new Date().toISOString().split('T')[0];
       setFormData(prev => ({
         ...prev,
@@ -64,48 +61,56 @@ const SessionForm = ({ session, onSave, onCancel }) => {
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    const updatedForm = {
+    ...formData,
+    [name]: value
+  };
     
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(updatedForm);
+    console.log(formData.startTime);
     
+
     // If mentor changes, update userName
     if (name === 'userId') {
       const selectedMentor = mentors.find(m => m.id === value);
       if (selectedMentor) {
-        setFormData(prev => ({
-          ...prev,
-          userName: selectedMentor.name
-        }));
+        updatedForm.userName = selectedMentor.name;
+        setFormData(updatedForm);
       }
     }
     
     // Calculate duration and amount when times change
+    console.log("reached");
+    
     if (name === 'startTime' || name === 'endTime') {
-      if (formData.startTime && formData.endTime) {
-        const start = new Date(`2000-01-01T${formData.startTime}`);
-        const end = new Date(`2000-01-01T${formData.endTime}`);
-        
+      console.log(name, updatedForm.startTime);
+      console.log(name, updatedForm.endTime);
+      
+      
+      if (updatedForm.startTime && updatedForm.endTime) {
+        const start = new Date(`2000-01-01T${updatedForm.startTime}`);
+        const end = new Date(`2000-01-01T${updatedForm.endTime}`);
         if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+
           const durationHours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
           
           if (durationHours > 0) {
-            const selectedMentor = mentors.find(m => m.id === formData.userId);
-            const BASE_RATES = {
-              junior: 1000,
-              senior: 2000,
-              expert: 3000
-            };
+            const selectedMentor = mentors.find(m => m.id === updatedForm.userId);
+            
+            // const BASE_RATES = {
+            //   junior: 1000,
+            //   senior: 2000,
+            //   expert: 3000
+            // };
+            
             const baseRate = selectedMentor?.mentorType 
               ? BASE_RATES[selectedMentor.mentorType]
               : 0;
             
-            setFormData(prev => ({
-              ...prev,
-              duration: durationHours,
-              amount: durationHours * baseRate
-            }));
+            updatedForm.duration = durationHours;
+            updatedForm.amount = durationHours * baseRate;
+            setFormData(updatedForm);
           }
         }
       }
