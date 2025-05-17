@@ -11,7 +11,7 @@ import { useSessions } from '@/hooks/useSessions';
 
 const Sessions = () => {
   // const [sessions, setSessions] = useState([]);
-  const{sessions, setSessions, isLoading, fetchSessions}= useSessions()
+  const {sessions, setSessions, isLoading, fetchSessions} = useSessions()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [currentSession, setCurrentSession] = useState(null);
@@ -29,12 +29,8 @@ const Sessions = () => {
   };
   
   const handleSaveSession = async (session) => {
-    console.log(session);
-    
     try {
-
       if (currentSession) {
-        
         const sessionRef = doc(db, 'sessions', currentSession.id);
         await updateDoc(sessionRef, session);
         toast.success('Session updated successfully');
@@ -46,12 +42,22 @@ const Sessions = () => {
         toast.success('Session added successfully');
       }
       if(session.status === 'Completed'){
-        const newPayoutRef = await addDoc(collection(db, 'payouts'), {
-          status: 'Pending',
-          amount: session.amount,
-          sessionId: session.id,
-        });
-        // await addDoc(newPayoutRef);
+        const isExists = payouts.filter(payout => payout.id === session.id).length > 0;
+        if(isExists){
+          const payoutRef = doc(db, 'payouts', payout.userId);
+          await updateDoc(payoutRef, { ...payout,
+                                       amount: payout.amount+session.amount,
+                                       sessions: [...payout.sessions, session.id]
+                                     });
+        } else{
+          const newPayoutRef = await addDoc(collection(db, 'payouts'), {
+            status: 'Pending',
+            amount: session.amount,
+            userId: session.userId,
+            sessions: [session.id]
+          });
+          await addDoc(newPayoutRef);
+        }
       }
       
       fetchSessions();
