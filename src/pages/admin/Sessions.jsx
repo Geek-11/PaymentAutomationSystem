@@ -57,13 +57,12 @@ const Sessions = () => {
           const newPayoutRef = await addDoc(collection(db, 'payouts'), {
             status: 'Pending',
             amount: session.amount,
-            userId: session.userId,
+            userId: session.userId, 
             sessions: [session.id]
           });
           // await addDoc(newPayoutRef);
         }
       }
-      
       fetchSessions();
       setIsModalOpen(false);
     } catch (error) {
