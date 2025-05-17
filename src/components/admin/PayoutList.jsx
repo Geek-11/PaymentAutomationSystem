@@ -16,11 +16,9 @@ const PayoutList = ({
   const { sessions } = useSessions();
   
   const filteredPayouts = payouts.filter(payout => {
-    console.log(payout);
-    
     const matchesSearch = 
       // payout.mentorName
-      sessions.find(session => session.id == payout.sessionId).userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      sessions.find(session => session?.userId == payout?.userId)?.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       payout.id.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = 
@@ -78,7 +76,7 @@ const PayoutList = ({
             <tr className="bg-gray-50 dark:bg-gray-700 text-left">
               <th className="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-300">ID</th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-300">Mentor</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-300">Date</th>
+              {/* <th className="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-300">Date</th> */}
               <th className="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-300">Sessions</th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-300">Amount</th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-300">Status</th>
@@ -93,12 +91,12 @@ const PayoutList = ({
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <td className="px-4 py-3 text-sm font-medium">{payout.id}</td>
-                  <td className="px-4 py-3 text-sm">{sessions.find(session => session.id === payout.sessionId).userName}</td>
-                  <td className="px-4 py-3 text-sm flex items-center">
+                  <td className="px-4 py-3 text-sm">{sessions.find(session => session.userId === payout.userId).userName}</td>
+                  {/* <td className="px-4 py-3 text-sm flex items-center">
                     <Calendar size={14} className="text-gray-400 mr-1" />
                     {formatDate(payout.date)}
-                  </td>
-                  <td className="px-4 py-3 text-sm">{payout.sessionsCount}</td>
+                  </td> */}
+                  <td className="px-4 py-3 text-sm">{payout.sessions.length}</td>
                   <td className="px-4 py-3 text-sm font-medium">
                     {formatCurrency(payout.amount)}
                   </td>

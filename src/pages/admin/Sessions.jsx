@@ -8,10 +8,11 @@ import SessionUpload from '@/components/admin/SessionUpload';
 import Modal from '@/components/common/Modal';
 import toast from 'react-hot-toast';
 import { useSessions } from '@/hooks/useSessions';
+import { usePayout } from '@/hooks/usePayout';
 
 const Sessions = () => {
-  // const [sessions, setSessions] = useState([]);
-  const {sessions, setSessions, isLoading, fetchSessions} = useSessions()
+  const { sessions, setSessions, isLoading, fetchSessions } = useSessions()
+  const { payouts } = usePayout();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [currentSession, setCurrentSession] = useState(null);
@@ -44,9 +45,10 @@ const Sessions = () => {
         toast.success('Session added successfully');
       }
       if(session.status === 'Completed'){
-        const isExists = payouts.filter(payout => payout.id === session.id).length > 0;
-        if(isExists){
-          const payoutRef = doc(db, 'payouts', payout.userId);
+        const payout = payouts.find(payout => payout.userId === session.userId);
+        console.log(payout);
+        if(payout){
+          const payoutRef = doc(db, 'payouts', payout.id);
           await updateDoc(payoutRef, { ...payout,
                                        amount: payout.amount+session.amount,
                                        sessions: [...payout.sessions, session.id]
@@ -58,7 +60,7 @@ const Sessions = () => {
             userId: session.userId,
             sessions: [session.id]
           });
-          await addDoc(newPayoutRef);
+          // await addDoc(newPayoutRef);
         }
       }
       
