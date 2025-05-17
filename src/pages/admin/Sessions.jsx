@@ -35,7 +35,9 @@ const Sessions = () => {
         await updateDoc(sessionRef, session);
         toast.success('Session updated successfully');
       } else {
+
         const newSessionRef = doc(collection(db, 'sessions'));
+
         session.id = newSessionRef.id;
         await setDoc(newSessionRef, session);
 
