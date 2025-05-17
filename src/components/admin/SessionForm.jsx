@@ -98,12 +98,6 @@ const SessionForm = ({ session, onSave, onCancel }) => {
           if (durationHours > 0) {
             const selectedMentor = mentors.find(m => m.id === updatedForm.userId);
             
-            // const BASE_RATES = {
-            //   junior: 1000,
-            //   senior: 2000,
-            //   expert: 3000
-            // };
-            
             const baseRate = selectedMentor?.mentorType 
               ? BASE_RATES[selectedMentor.mentorType]
               : 0;
@@ -122,6 +116,12 @@ const SessionForm = ({ session, onSave, onCancel }) => {
     
     // Prepare date in ISO format
     const sessionDate = new Date(formData.date);
+    
+    const sessionEndDateTimeStr = `${formData.date}T${formData.endTime}:00`;
+    const sessionEndDateTime = new Date(sessionEndDateTimeStr);
+    const currentDateTime = new Date();
+    const status = sessionEndDateTime > currentDateTime ? 'Pending' : 'Completed';
+
     const sessionDateTime = formData.startTime 
       ? `${formData.date}T${formData.startTime}:00` 
       : sessionDate.toISOString();
@@ -129,7 +129,8 @@ const SessionForm = ({ session, onSave, onCancel }) => {
     onSave({
       id: session?.id || '',
       ...formData,
-      date: sessionDateTime
+      date: sessionDateTime,
+      status
     });
   };
   

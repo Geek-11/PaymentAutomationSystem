@@ -61,9 +61,7 @@ const Sessions = () => {
         const newSessionRef = doc(collection(db, 'sessions'));
         session.id = newSessionRef.id;
         await setDoc(newSessionRef, session);
-        
-        // console.log(await addDoc(collection(db, 'sessions'), session));
-        // toast.success('Session added successfully');
+        toast.success('Session added successfully');
       }
       
       fetchSessions();
@@ -114,7 +112,7 @@ const Sessions = () => {
         onAddSession={handleAddSession}
         onEditSession={handleEditSession}
         onDeleteSession={handleDeleteSession}
-        onUploadSessions={() => setIsUploadModalOpen(true)}
+        onExportSessions={() => setIsUploadModalOpen(true)}
       />
       
       <Modal

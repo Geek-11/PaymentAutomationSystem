@@ -27,7 +27,9 @@ function App() {
       <AuthProvider>
         <UserProvider>
           <Router>
-            <Suspense fallback={<div style={{ textAlign: 'center', padding: '2rem' }}>Loading...</div>}>
+            <Suspense fallback={<div className="h-96 flex items-center justify-center">
+                                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-500"></div>
+                                </div>}>
               <Routes>
                 <Route path="/login" element={<Login />} />
                 
