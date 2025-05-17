@@ -1,20 +1,46 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { collection, query, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc } from 'firebase/firestore';
+import { db } from '@/firebase';
 import AdminLayout from '@/components/layout/AdminLayout';
 import PayoutList from '@/components/admin/PayoutList';
 import GeneratePayoutForm from '@/components/admin/GeneratePayoutForm';
 import Modal from '@/components/common/Modal';
 import { mockPayouts, mockMentors } from '@/data/mockData';
 import toast from 'react-hot-toast';
+import { useSessions } from '@/hooks/useSessions';
 
 const Payouts = () => {
   const [payouts, setPayouts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { sessions } = useSessions();
+  console.log(sessions);
+  
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const navigate = useNavigate();
 
+const fetchPayouts = async () => {
+    try {
+      const payoutRef = collection(db, 'payouts');
+      const querySnapshot = await getDocs(payoutRef);
+      
+      const fetchedPayouts = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      setPayouts(fetchedPayouts);
+    } catch (error) {
+      console.error('Error fetching payouts:', error.message);
+      toast.error('Failed to load payouts');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
   useEffect(() => {
-    
-  }, [])
+    fetchPayouts();
+  }, []);
   
   const handleGeneratePayout = () => {
     setIsGenerateModalOpen(true);

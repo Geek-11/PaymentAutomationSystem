@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { collection, query, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import AdminLayout from '@/components/layout/AdminLayout';
@@ -7,36 +7,15 @@ import SessionForm from '@/components/admin/SessionForm';
 import SessionUpload from '@/components/admin/SessionUpload';
 import Modal from '@/components/common/Modal';
 import toast from 'react-hot-toast';
+import { useSessions } from '@/hooks/useSessions';
 
 const Sessions = () => {
-  const [sessions, setSessions] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [sessions, setSessions] = useState([]);
+  const{sessions, setSessions, isLoading, fetchSessions}= useSessions()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [currentSession, setCurrentSession] = useState(null);
   
-  const fetchSessions = async () => {
-    try {
-      const sessionsRef = collection(db, 'sessions');
-      const querySnapshot = await getDocs(sessionsRef);
-      
-      const fetchedSessions = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      
-      setSessions(fetchedSessions);
-    } catch (error) {
-      console.error('Error fetching sessions:', error);
-      toast.error('Failed to load sessions');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
-  useEffect(() => {
-    fetchSessions();
-  }, []);
   
   const handleAddSession = () => {
     setCurrentSession(null);

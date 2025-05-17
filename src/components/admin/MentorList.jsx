@@ -68,7 +68,6 @@ const MentorList = ({
                         </span>
                       </div>
                       <div className="ml-4">
-                        {console.log(mentor)}
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {mentor.name}
                         </div>

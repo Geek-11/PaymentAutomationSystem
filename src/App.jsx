@@ -5,6 +5,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { UserProvider } from '@/contexts/UserContext';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { Suspense, lazy } from 'react';
+import { SessionContextProvider } from './contexts/SessionContext';
 
 // Lazy imports
 const Login = lazy(() => import('@/pages/auth/Login'));
@@ -23,6 +24,7 @@ const NotFound = lazy(() => import('@/pages/common/NotFound'));
 
 function App() {
   return (
+    <SessionContextProvider>
     <ThemeProvider>
       <AuthProvider>
         <UserProvider>
@@ -137,6 +139,7 @@ function App() {
         </UserProvider>
       </AuthProvider>
     </ThemeProvider>
+    </SessionContextProvider>
   );
 }
 

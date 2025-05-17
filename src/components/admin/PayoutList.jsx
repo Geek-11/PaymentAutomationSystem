@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Search, FileText, Calendar, PlusCircle, Eye, Mail, PlayCircle } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { formatCurrency, formatDate } from '@/utils/format';
+import { useSessions } from '@/hooks/useSessions';
 
 const PayoutList = ({
   payouts,
@@ -12,10 +13,14 @@ const PayoutList = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const { sessions } = useSessions();
   
   const filteredPayouts = payouts.filter(payout => {
+    console.log(payout);
+    
     const matchesSearch = 
-      payout.mentorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      // payout.mentorName
+      sessions.find(session => session.id == payout.sessionId).userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       payout.id.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = 
@@ -88,14 +93,14 @@ const PayoutList = ({
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <td className="px-4 py-3 text-sm font-medium">{payout.id}</td>
-                  <td className="px-4 py-3 text-sm">{payout.mentorName}</td>
+                  <td className="px-4 py-3 text-sm">{sessions.find(session => session.id === payout.sessionId).userName}</td>
                   <td className="px-4 py-3 text-sm flex items-center">
                     <Calendar size={14} className="text-gray-400 mr-1" />
                     {formatDate(payout.date)}
                   </td>
                   <td className="px-4 py-3 text-sm">{payout.sessionsCount}</td>
                   <td className="px-4 py-3 text-sm font-medium">
-                    {formatCurrency(payout.totalAmount)}
+                    {formatCurrency(payout.amount)}
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <span className={`px-2 py-1 text-xs rounded-full ${statusColors[payout.status]}`}>
