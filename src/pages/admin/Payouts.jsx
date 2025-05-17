@@ -14,6 +14,7 @@ import { usePayout } from '@/hooks/usePayout';
 const Payouts = () => {
   const {payouts, setPayouts,isLoading} = usePayout();
   const { sessions } = useSessions();
+  console.log(payouts);
   console.log(sessions);
   
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
