@@ -50,9 +50,11 @@ const Sessions = () => {
   };
   
   const handleSaveSession = async (session) => {
+    console.log(session);
+    
     try {
+
       if (currentSession) {
-        console.log(currentSession);
         
         const sessionRef = doc(db, 'sessions', currentSession.id);
         await updateDoc(sessionRef, session);
@@ -61,7 +63,16 @@ const Sessions = () => {
         const newSessionRef = doc(collection(db, 'sessions'));
         session.id = newSessionRef.id;
         await setDoc(newSessionRef, session);
+
         toast.success('Session added successfully');
+      }
+      if(session.status === 'Completed'){
+        const newPayoutRef = await addDoc(collection(db, 'payouts'), {
+          status: 'Pending',
+          amount: session.amount,
+          sessionId: session.id,
+        });
+        // await addDoc(newPayoutRef);
       }
       
       fetchSessions();

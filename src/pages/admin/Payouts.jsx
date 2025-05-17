@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/layout/AdminLayout';
 import PayoutList from '@/components/admin/PayoutList';
@@ -8,9 +8,13 @@ import { mockPayouts, mockMentors } from '@/data/mockData';
 import toast from 'react-hot-toast';
 
 const Payouts = () => {
-  const [payouts, setPayouts] = useState(mockPayouts);
+  const [payouts, setPayouts] = useState([]);
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    
+  }, [])
   
   const handleGeneratePayout = () => {
     setIsGenerateModalOpen(true);
