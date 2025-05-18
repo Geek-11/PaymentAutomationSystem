@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebase";
 import toast from "react-hot-toast";
+import { useUser } from "@/hooks/useUser";
 
 export const PayoutContext = createContext();
 
@@ -19,7 +20,10 @@ export const PayoutContextProvider = ({ children }) => {
   const [payouts, setPayouts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const {mentors} = useUser();
 
+  console.log(mentors);
+  
   // ✅ Step 1: Fetch all payouts
   const fetchPayouts = async () => {
     try {
@@ -102,6 +106,56 @@ export const PayoutContextProvider = ({ children }) => {
     }
   };
 
+  const generatePayoutEmail = (receipt, mentorName) => {
+    console.log(receipt);
+    
+    const statusText = receipt.status === 'UnderReview' 
+                                          ? 'is under review'
+                                          : 'is pending payment';
+
+  const subject = `Payout ${statusText} - ₹${receipt.amount.toLocaleString()}`;
+
+  const body = `
+    Dear ${mentorName},
+
+    Your payout for the period ${new Date(receipt.periodStart).toLocaleDateString()} to ${new Date(receipt.periodEnd).toLocaleDateString()} ${statusText}.
+
+    Amount Details:
+
+    - Subtotal: ₹${(receipt.amount - (0.05 * receipt.amount) - (0.18 * receipt.amount)).toLocaleString()}
+
+    - Platform Fee: ₹${(0.05 * receipt.amount).toLocaleString()}
+
+    - GST: ₹${(0.18 * receipt.amount).toLocaleString()}
+
+    - Total Amount: ₹${receipt.amount.toLocaleString()}
+
+
+
+    ${receipt.status === 'UnderReview' 
+
+      ? 'Our team is reviewing your payout and will process it soon.'
+
+      : 'Your payout will be processed according to the regular payment schedule.'}
+
+
+
+    If you have any questions, please contact support through the chat system.
+
+
+
+    Best regards,
+
+    PayoutSync Team
+
+      `.trim();
+
+
+
+      return { subject, body };
+
+    };
+
   // ✅ Step 4: Generate Receipt
   const generateReceipt = async (data, allSessions) => {
     setError("");
@@ -109,11 +163,16 @@ export const PayoutContextProvider = ({ children }) => {
       const {
         mentorId,
         mentorName,
-        periodStart,
-        periodEnd,
         sessionIds,
         notes,
       } = data;
+
+        // Dynamically get periodStart and periodEnd from the sessions
+        const selectedSessions = allSessions.filter((s) => sessionIds.includes(s.id));
+        const sessionDates = selectedSessions.map((s) => new Date(s.date)); // assuming session object has `date` field
+            
+        const periodStart = new Date(Math.min(...sessionDates));
+        const periodEnd = new Date(Math.max(...sessionDates));
 
       // 🔥 Fetch mentor country from Firestore
       const mentorRef = doc(db, "mentors", mentorId);
@@ -136,24 +195,26 @@ export const PayoutContextProvider = ({ children }) => {
       const initialStatus =
         calculations.totalAmount > 10000 ? "UnderReview" : "Pending";
 
-      const newReceipt = {
-        mentorId,
-        mentorName,
-        periodStart,
-        periodEnd,
-        sessions: sessionIds,
-        ...calculations,
-        status: initialStatus,
-        notes,
-        createdAt: new Date().toISOString(),
-      };
+      // const newReceipt = {
+      //   mentorId,
+      //   mentorName,
+      //   periodStart,
+      //   periodEnd,
+      //   sessions: sessionIds,
+      //   ...calculations,
+      //   status: initialStatus,
+      //   notes,
+      //   createdAt: new Date().toISOString(),
+      // };
 
-      const docRef = await addDoc(collection(db, "payouts"), newReceipt);
-      const savedReceipt = { id: docRef.id, ...newReceipt };
+      // const docRef = await addDoc(collection(db, "payouts"), newReceipt);
+      // const savedReceipt = { id: docRef.id, ...newReceipt };
 
       // ✉️ Send email
-      try {
-        const { subject, body } = generatePayoutEmail(savedReceipt, mentorName);
+      const newReceipt = {...data, periodStart, periodEnd, createdAt: new Date().toISOString()};
+      try {    
+        console.log(mentors.find(mentor => mentor.id === mentorId).email)  
+        const { subject, body } = generatePayoutEmail(newReceipt, mentorName);
         await fetch(
           " https://us-central1-automatic-payout-cf808.cloudfunctions.net/sendPayoutEmail",
           {
@@ -162,9 +223,7 @@ export const PayoutContextProvider = ({ children }) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              to: `${mentorName
-                .toLowerCase()
-                .replace(/\s+/g, ".")}@example.com`,
+              to: `${mentors.find(mentor => mentor.id === mentorId).email}`,
               subject,
               body,
             }),
@@ -174,8 +233,8 @@ export const PayoutContextProvider = ({ children }) => {
         console.error("Failed to send email:", emailErr);
       }
 
-      setPayouts((prev) => [...prev, savedReceipt]);
-      return savedReceipt;
+      // setPayouts((prev) => [...prev, newReceipt]);
+      return newReceipt;
     } catch (err) {
       setError("Error generating receipt");
       console.error(err);

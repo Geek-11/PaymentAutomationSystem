@@ -3,7 +3,8 @@ import { collection, query, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc }
 import { db } from '@/firebase';
 
 
-export const SessionContext= createContext()
+export const SessionContext= createContext();
+
 export const SessionContextProvider=({children})=>{
   const [sessions, setSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

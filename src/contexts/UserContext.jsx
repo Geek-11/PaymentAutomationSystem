@@ -29,8 +29,8 @@ export const UserProvider = ({ children }) => {
           ...doc.data()
         }));
         console.log(fetchedMentors);
-        setMentors(fetchedMentors);
         
+        setMentors(fetchedMentors);
         // Fetch all users
         const usersRef = collection(db, 'users');
         const usersSnapshot = await getDocs(usersRef);
