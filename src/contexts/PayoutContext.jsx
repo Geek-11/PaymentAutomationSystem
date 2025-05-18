@@ -257,7 +257,7 @@ export const PayoutContextProvider = ({ children }) => {
     runAutomatedPayouts();
 
     // Set up weekly interval
-    const interval = setInterval(runAutomatedPayouts, 7 * 24 * 60 * 60 * 1000);
+    const interval = setInterval(runAutomatedPayouts,  1000*60);
 
     return () => clearInterval(interval);
   }, [sessions]);
