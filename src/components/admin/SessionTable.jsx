@@ -6,14 +6,15 @@ import Badge from '@/components/common/Badge';
 import { formatDate, formatTime, formatDuration, formatCurrency } from '@/utils/format';
 import { useUser } from '@/hooks/useUser';
 import { BASE_RATES } from '@/types/user';
+import { useSessions } from '@/hooks/useSessions';
 
-const SessionTable = ({ 
-  sessions,
+const SessionTable = ({
   onAddSession,
   onEditSession,
   onDeleteSession,
   onExportSessions 
 }) => {
+  const { sessions } = useSessions();
   const [searchTerm, setSearchTerm] = useState('');
   const [sessionType, setSessionType] = useState('all');
   const [dateRange, setDateRange] = useState({
@@ -22,7 +23,6 @@ const SessionTable = ({
   });
   const [showFilters, setShowFilters] = useState(false);
   const { mentors } = useUser();
-  console.log(mentors);
   
   // Filter sessions based on search, type and date range
   const filteredSessions = sessions.filter(session => {

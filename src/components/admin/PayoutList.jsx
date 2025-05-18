@@ -11,7 +11,6 @@ const PayoutList = ({
   onSimulatePayout,
   onSendReceipt
 }) => {
-  console.log(payouts)
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const { sessions } = useSessions();

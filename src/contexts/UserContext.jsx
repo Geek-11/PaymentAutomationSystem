@@ -54,6 +54,7 @@ export const UserProvider = ({ children }) => {
       currentUser: user, 
       users, 
       mentors,
+      setMentors,
       isLoading 
     }}>
       {children}

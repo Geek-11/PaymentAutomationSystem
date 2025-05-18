@@ -67,9 +67,7 @@ const SessionForm = ({ session, onSave, onCancel }) => {
     [name]: value
   };
     
-    setFormData(updatedForm);
-    console.log(formData.startTime);
-    
+    setFormData(updatedForm);    
 
     // If mentor changes, update userName
     if (name === 'userId') {
@@ -81,12 +79,8 @@ const SessionForm = ({ session, onSave, onCancel }) => {
     }
     
     // Calculate duration and amount when times change
-    console.log("reached");
     
-    if (name === 'startTime' || name === 'endTime') {
-      console.log(name, updatedForm.startTime);
-      console.log(name, updatedForm.endTime);
-      
+    if (name === 'startTime' || name === 'endTime') {     
       
       if (updatedForm.startTime && updatedForm.endTime) {
         const start = new Date(`2000-01-01T${updatedForm.startTime}`);

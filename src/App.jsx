@@ -26,8 +26,8 @@ const NotFound = lazy(() => import('@/pages/common/NotFound'));
 function App() {
   return (
     <UserProvider>
-    <PayoutContextProvider>
     <SessionContextProvider>
+    <PayoutContextProvider>
     <ThemeProvider>
       <AuthProvider>
         
@@ -141,8 +141,8 @@ function App() {
           <Toaster position="top-center" />
       </AuthProvider>
     </ThemeProvider>
-    </SessionContextProvider>
     </PayoutContextProvider>
+    </SessionContextProvider>
   </UserProvider>
   );
 }

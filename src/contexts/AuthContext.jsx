@@ -9,6 +9,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
 import toast from 'react-hot-toast';
 import { BASE_RATES } from '@/types/user';
+import { useUser } from '@/hooks/useUser';
 
 export const AuthContext = createContext({
   user: null,
@@ -22,6 +23,7 @@ export const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const {mentors, setMentors} = useUser();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -70,6 +72,10 @@ export const AuthProvider = ({ children }) => {
 
       // Create user document in Firestore
       await setDoc(doc(db, 'users', firebaseUser.uid), userData);
+
+      if(role === "mentor"){
+        setMentors([...mentors, {...userData, id: firebaseUser.uid}]);
+      }
 
       setUser({
         id: firebaseUser.uid,
