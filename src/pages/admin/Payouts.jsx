@@ -12,16 +12,14 @@ import { useSessions } from '@/hooks/useSessions';
 import { usePayout } from '@/hooks/usePayout';
 
 const Payouts = () => {
-  const {payouts, setPayouts,isLoading} = usePayout();
+  const {payouts, setPayouts,isLoading, generateReceipt} = usePayout();
   const { sessions } = useSessions();
-  console.log(payouts);
-  console.log(sessions);
+  // console.log(payouts);
+  // console.log(sessions);
   
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const navigate = useNavigate();
 
-
-  
   const handleGeneratePayout = () => {
     setIsGenerateModalOpen(true);
   };
@@ -41,6 +39,16 @@ const Payouts = () => {
   };
   
   const handleSendReceipt = (payoutId) => {
+    const payout = payouts.find(p => p.id === payoutId);
+    const data = {
+      id: payoutId,
+      mentorId: payout.userId,
+      mentorName: sessions.find(session => session.userId === payout.userId)?.userName,
+      sessionIds: sessions,
+      notes: 'abc',
+      amount: payout.amount
+    }
+    generateReceipt(data, sessions);
     toast.success('Receipt sent to mentor');
   };
   

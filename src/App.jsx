@@ -25,11 +25,12 @@ const NotFound = lazy(() => import('@/pages/common/NotFound'));
 
 function App() {
   return (
+    <UserProvider>
     <PayoutContextProvider>
     <SessionContextProvider>
     <ThemeProvider>
       <AuthProvider>
-        <UserProvider>
+        
           <Router>
             <Suspense fallback={<div className="h-96 flex items-center justify-center">
                                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-500"></div>
@@ -138,11 +139,11 @@ function App() {
             </Suspense>
           </Router>
           <Toaster position="top-center" />
-        </UserProvider>
       </AuthProvider>
     </ThemeProvider>
     </SessionContextProvider>
     </PayoutContextProvider>
+  </UserProvider>
   );
 }
 

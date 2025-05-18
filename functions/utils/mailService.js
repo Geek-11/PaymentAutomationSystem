@@ -1,31 +1,29 @@
-// index.js
-import { onRequest } from "firebase-functions/v2/https";
+// mailService.js
 import nodemailer from "nodemailer";
+
 // Setup transporter
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "your-email@gmail.com",
-    pass: "your-app-password", // App password, not your Gmail login
+    user: "gopeshgoyal26@gmail.com",
+    pass: "toqp tjth tvlg pbbx", // App password
   },
 });
 
-// Cloud Function to send email
-export const sendEmail = onRequest(async (req, res) => {
-  const { to, subject, message } = req.body;
-
+// Reusable sendEmail function
+export async function sendEmail({ to, subject, body }) {
   const mailOptions = {
-    from: "your-email@gmail.com",
-    to: to || "recipient@example.com",
-    subject: subject || "Default Subject",
-    text: message || "Default message body.",
+    from: "gopeshgoyal26@gmail.com",
+    to,
+    subject: subject || "No subject",
+    text: body || "No content",
   };
 
   try {
-    await transporter.sendMail(mailOptions);
-    res.send("✅ Email sent successfully!");
-  } catch (error) {
-    console.error("❌ Error sending email:", error);
-    res.status(500).send("Failed to send email");
+    const result = await transporter.sendMail(mailOptions);
+    console.log("✅ Email sent:", result.response);
+  } catch (err) {
+    console.error("❌ Error sending email:", err);
+    throw err;
   }
-});
+}

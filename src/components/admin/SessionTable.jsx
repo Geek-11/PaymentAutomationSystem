@@ -8,9 +8,9 @@ import { useUser } from '@/hooks/useUser';
 import { BASE_RATES } from '@/types/user';
 
 const SessionTable = ({ 
-  sessions, 
-  onAddSession, 
-  onEditSession, 
+  sessions,
+  onAddSession,
+  onEditSession,
   onDeleteSession,
   onExportSessions 
 }) => {
@@ -22,9 +22,11 @@ const SessionTable = ({
   });
   const [showFilters, setShowFilters] = useState(false);
   const { mentors } = useUser();
+  console.log(mentors);
   
   // Filter sessions based on search, type and date range
   const filteredSessions = sessions.filter(session => {
+    
     const matchesSearch = 
       session.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       session.title.toLowerCase().includes(searchTerm.toLowerCase());

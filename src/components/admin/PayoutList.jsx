@@ -11,11 +11,14 @@ const PayoutList = ({
   onSimulatePayout,
   onSendReceipt
 }) => {
+  console.log(payouts)
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const { sessions } = useSessions();
   
   const filteredPayouts = payouts.filter(payout => {
+    console.log(payout);
+    
     const matchesSearch = 
       // payout.mentorName
       sessions.find(session => session?.userId == payout?.userId)?.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -91,7 +94,7 @@ const PayoutList = ({
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <td className="px-4 py-3 text-sm font-medium">{payout.id}</td>
-                  <td className="px-4 py-3 text-sm">{sessions.find(session => session.userId === payout.userId).userName}</td>
+                  <td className="px-4 py-3 text-sm">{sessions.find(session => session.userId === payout.userId)?.userName || "UNKNOWN"}</td>
                   {/* <td className="px-4 py-3 text-sm flex items-center">
                     <Calendar size={14} className="text-gray-400 mr-1" />
                     {formatDate(payout.date)}

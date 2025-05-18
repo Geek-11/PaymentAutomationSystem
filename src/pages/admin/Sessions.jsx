@@ -60,7 +60,7 @@ const Sessions = () => {
             userId: session.userId, 
             sessions: [session.id]
           });
-          // await addDoc(newPayoutRef);
+          await addDoc(newPayoutRef);
         }
       }
       fetchSessions();
