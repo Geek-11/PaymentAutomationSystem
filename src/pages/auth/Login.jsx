@@ -6,7 +6,6 @@ import Logo from '@/components/common/Logo';
 import Button from '@/components/common/Button';
 import toast from 'react-hot-toast';
 import { useUser } from '@/hooks/useUser';
-import { BASE_RATES } from '@/types/user';
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -55,7 +54,6 @@ const Login = () => {
             country: formData.country
           }
         );
-
         toast.success('Account created successfully');
       } else {
         await login(formData.email, formData.password);
@@ -77,26 +75,26 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
+      <div className="w-full max-w-xl space-y-8">
         <div className="text-center">
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-6">
             <Logo />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
-            {isSignup ? 'Create your account' : 'Sign in to your account'}
+            {isSignup ? 'Join the Platform' : 'Verify Your Identity'}
           </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            {isSignup 
-              ? 'Enter your details to create an account' 
+            {isSignup
+              ? 'Enter your details to create an account'
               : 'Enter your credentials to access your account'}
           </p>
         </div>
 
-        <div className="mt-8 bg-white dark:bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="mt-8 bg-white dark:bg-gray-800 py-8 px-6 shadow sm:rounded-lg sm:px-8">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {isSignup && (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       First Name
@@ -108,7 +106,7 @@ const Login = () => {
                       required
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                     />
                   </div>
 
@@ -123,7 +121,7 @@ const Login = () => {
                       required
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                     />
                   </div>
                 </div>
@@ -139,11 +137,11 @@ const Login = () => {
                     required
                     value={formData.country}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                    className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
 
-                <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="accountNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Account Number
@@ -155,7 +153,7 @@ const Login = () => {
                       required
                       value={formData.accountNumber}
                       onChange={handleInputChange}
-                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                     />
                   </div>
 
@@ -170,7 +168,7 @@ const Login = () => {
                       required
                       value={formData.ifscCode}
                       onChange={handleInputChange}
-                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                     />
                   </div>
                 </div>
@@ -188,7 +186,7 @@ const Login = () => {
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-700 dark:text-white"
               />
             </div>
 
@@ -204,32 +202,16 @@ const Login = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white pr-10"
+                  className="block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 pr-10 text-sm focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 px-3 flex items-center"
+                  className="absolute inset-y-0 right-0 flex items-center px-3"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-            </div>
-
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Role
-              </label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleInputChange}
-                className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
-              >
-                <option value="mentor">Mentor</option>
-                <option value="admin">Administrator</option>
-              </select>
             </div>
 
             {isSignup && formData.role === 'mentor' && (
@@ -242,7 +224,7 @@ const Login = () => {
                   name="mentorType"
                   value={formData.mentorType}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                 >
                   <option value="DSA Instructor">DSA Instructor</option>
                   <option value="Coding Instructor">Coding Instructor</option>

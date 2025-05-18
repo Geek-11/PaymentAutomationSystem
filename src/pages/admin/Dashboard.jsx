@@ -5,13 +5,17 @@ import { BarChart, ArrowDown, ArrowUp, Users, Clock, DollarSign, BarChart4 } fro
 import AdminLayout from '@/components/layout/AdminLayout';
 import Button from '@/components/common/Button';
 import { formatCurrency } from '@/utils/format';
+import { usePayout } from '@/hooks/usePayout';
 
 const AdminDashboard = () => {
   const [sessions, setSessions] = useState([]);
   const [mentors, setMentors] = useState([]);
   const [payouts, setPayouts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+  const{payouts:orignalPayout}=usePayout();
+
+  const showTotal= orignalPayout.reduce((sum,curr)=>sum=sum+curr.amount,0)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -176,7 +180,7 @@ const AdminDashboard = () => {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Payouts</p>
-              <p className="text-2xl font-bold">{formatCurrency(totalPayout)}</p>
+              <p className="text-2xl font-bold">{formatCurrency(showTotal)}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 For {payouts.length} payouts
               </p>
