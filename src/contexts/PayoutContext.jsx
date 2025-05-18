@@ -13,6 +13,8 @@ import {
 import { db } from "@/firebase";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
+import { processAutomatedPayouts } from "@/utils/payoutAutomate";
+import { useSessions } from "@/hooks/useSessions";
 
 export const PayoutContext = createContext();
 
@@ -21,6 +23,9 @@ export const PayoutContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const {mentors} = useUser();
+  const{sessions}= useSessions()
+  
+
 
   console.log(mentors);
   
@@ -241,6 +246,25 @@ export const PayoutContextProvider = ({ children }) => {
       return false;
     }
   };
+
+  // Run automated payouts weekly
+  useEffect(() => {
+    const runAutomatedPayouts = async () => {
+      await processAutomatedPayouts(
+        sessions
+        // generateReceipt,
+        // updateReceiptStatus
+      );
+    };
+
+    // Run immediately on mount
+    runAutomatedPayouts();
+
+    // Set up weekly interval
+    const interval = setInterval(runAutomatedPayouts, 7 * 24 * 60 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [sessions]);
 
   return (
     <PayoutContext.Provider
