@@ -28,7 +28,7 @@ export const UserProvider = ({ children }) => {
           id: doc.id,
           ...doc.data()
         }));
-        console.log('fetched',fetchedMentors);
+        console.log(fetchedMentors);
         
         setMentors(fetchedMentors);
         // Fetch all users
@@ -54,6 +54,7 @@ export const UserProvider = ({ children }) => {
       currentUser: user, 
       users, 
       mentors,
+      setMentors,
       isLoading 
     }}>
       {children}

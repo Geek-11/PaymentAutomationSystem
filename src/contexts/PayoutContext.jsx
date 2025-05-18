@@ -25,10 +25,6 @@ export const PayoutContextProvider = ({ children }) => {
   const {mentors} = useUser();
   const{sessions}= useSessions()
   
-
-
-  console.log(mentors);
-  
   // ✅ Step 1: Fetch all payouts
   const fetchPayouts = async () => {
     try {

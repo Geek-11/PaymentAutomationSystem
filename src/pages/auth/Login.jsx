@@ -5,6 +5,8 @@ import { Eye, EyeOff, LogIn, UserPlus } from 'lucide-react';
 import Logo from '@/components/common/Logo';
 import Button from '@/components/common/Button';
 import toast from 'react-hot-toast';
+import { useUser } from '@/hooks/useUser';
+import { BASE_RATES } from '@/types/user';
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -24,6 +26,7 @@ const Login = () => {
 
   const { login, signup } = useAuth();
   const navigate = useNavigate();
+  const { mentors, setMentors } = useUser();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,6 +55,7 @@ const Login = () => {
             country: formData.country
           }
         );
+
         toast.success('Account created successfully');
       } else {
         await login(formData.email, formData.password);

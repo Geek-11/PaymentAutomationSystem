@@ -1,5 +1,5 @@
 export const processAutomatedPayouts = async (sessions) => {
-  console.log(sessions)
+
   try {
     // Group sessions by mentor
     const mentorSessions = sessions.reduce((acc, session) => {
