@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { Eye, EyeOff, LogIn, UserPlus } from 'lucide-react';
-import Logo from '@/components/common/Logo';
-import Button from '@/components/common/Button';
-import toast from 'react-hot-toast';
-import { useUser } from '@/hooks/useUser';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
+import Logo from "@/components/common/Logo";
+import Button from "@/components/common/Button";
+import toast from "react-hot-toast";
+import { useUser } from "@/hooks/useUser";
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    accountNumber: '',
-    ifscCode: '',
-    country: '',
-    role: 'mentor',
-    mentorType: 'Instructor Associate'
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    accountNumber: "",
+    ifscCode: "",
+    country: "",
+    role: "mentor",
+    mentorType: "Instructor Associate",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,9 +29,9 @@ const Login = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -51,19 +51,19 @@ const Login = () => {
           {
             accountNumber: formData.accountNumber,
             ifscCode: formData.ifscCode,
-            country: formData.country
+            country: formData.country,
           }
         );
-        toast.success('Account created successfully');
+        toast.success("Account created successfully");
       } else {
         await login(formData.email, formData.password);
-        toast.success('Logged in successfully');
+        toast.success("Logged in successfully");
       }
 
-      navigate(formData.role === 'admin' ? '/admin' : '/mentor');
+      navigate(formData.role === "admin" ? "/admin" : "/mentor");
     } catch (error) {
-      console.error('Authentication error:', error);
-      toast.error(error.message || 'Authentication failed');
+      console.error("Authentication error:", error);
+      toast.error(error.message || "Authentication failed");
     } finally {
       setIsLoading(false);
     }
@@ -81,12 +81,12 @@ const Login = () => {
             <Logo />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
-            {isSignup ? 'Join the Platform' : 'Verify Your Identity'}
+            {isSignup ? "Join the Platform" : "Verify Your Identity"}
           </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             {isSignup
-              ? 'Enter your details to create an account'
-              : 'Enter your credentials to access your account'}
+              ? "Enter your details to create an account"
+              : "Enter your credentials to access your account"}
           </p>
         </div>
 
@@ -96,7 +96,10 @@ const Login = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label
+                      htmlFor="firstName"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                       First Name
                     </label>
                     <input
@@ -111,7 +114,10 @@ const Login = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label
+                      htmlFor="lastName"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                       Last Name
                     </label>
                     <input
@@ -127,7 +133,10 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="country" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    htmlFor="country"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Country
                   </label>
                   <input
@@ -143,7 +152,10 @@ const Login = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="accountNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label
+                      htmlFor="accountNumber"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                       Account Number
                     </label>
                     <input
@@ -158,7 +170,10 @@ const Login = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="ifscCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label
+                      htmlFor="ifscCode"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                       IFSC Code
                     </label>
                     <input
@@ -176,7 +191,10 @@ const Login = () => {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Email address
               </label>
               <input
@@ -191,7 +209,10 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Password
               </label>
               <div className="mt-1 relative">
@@ -213,10 +234,33 @@ const Login = () => {
                 </button>
               </div>
             </div>
-
-            {isSignup && formData.role === 'mentor' && (
+            {isSignup && (
               <div>
-                <label htmlFor="mentorType" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label
+                  htmlFor="role"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Role
+                </label>
+                <select
+                  id="role"
+                  name="role"
+                  value={formData.role}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="mentor">Mentor</option>
+                  <option value="admin">Administrator</option>
+                </select>
+              </div>
+            )}
+
+            {isSignup && formData.role === "mentor" && (
+              <div>
+                <label
+                  htmlFor="mentorType"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
                   Mentor Type
                 </label>
                 <select
@@ -229,7 +273,9 @@ const Login = () => {
                   <option value="DSA Instructor">DSA Instructor</option>
                   <option value="Coding Instructor">Coding Instructor</option>
                   <option value="CSBT Instructor">CSBT Instructor</option>
-                  <option value="Instructor Associate">Instructor Associate</option>
+                  <option value="Instructor Associate">
+                    Instructor Associate
+                  </option>
                 </select>
               </div>
             )}
@@ -240,7 +286,7 @@ const Login = () => {
               isFullWidth
               leftIcon={isSignup ? <UserPlus size={16} /> : <LogIn size={16} />}
             >
-              {isSignup ? 'Create Account' : 'Sign in'}
+              {isSignup ? "Create Account" : "Sign in"}
             </Button>
           </form>
 
@@ -251,7 +297,7 @@ const Login = () => {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">
-                  {isSignup ? 'Already have an account?' : 'Need an account?'}
+                  {isSignup ? "Already have an account?" : "Need an account?"}
                 </span>
               </div>
             </div>
@@ -262,7 +308,7 @@ const Login = () => {
                 onClick={() => setIsSignup(!isSignup)}
                 className="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
               >
-                {isSignup ? 'Sign in instead' : 'Create an account'}
+                {isSignup ? "Sign in instead" : "Create an account"}
               </button>
             </div>
           </div>
