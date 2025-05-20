@@ -6,6 +6,7 @@ import Logo from "@/components/common/Logo";
 import Button from "@/components/common/Button";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
+import ThemeToggle from "@/components/common/ThemeToggle";
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -310,6 +311,10 @@ const Login = () => {
               >
                 {isSignup ? "Sign in instead" : "Create an account"}
               </button>
+              <div className="absolute top-0 right-0 p-4 flex items-center gap-4 z-50">
+                <ThemeToggle />
+              
+              </div>
             </div>
           </div>
         </div>
