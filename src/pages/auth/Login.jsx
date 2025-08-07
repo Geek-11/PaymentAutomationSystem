@@ -43,6 +43,10 @@ const Login = () => {
     try {
       if (isSignup) {
         const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+        const isValid = String(formData.ifscCode).match("^[A-Z]{4}[0][A-Z0-9]{6}$");
+        if(!isValid){
+          throw new Error('Wrong Ifsc format');
+        }
         await signup(
           formData.email,
           formData.password,
