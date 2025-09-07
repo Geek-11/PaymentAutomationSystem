@@ -87,7 +87,7 @@ const SessionForm = ({ session, onSave, onCancel }) => {
         const end = new Date(`2000-01-01T${updatedForm.endTime}`);
         if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
 
-          const durationHours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+          const durationHours = ((end.getTime() - start.getTime()) / (1000 * 60 * 60)).toFixed(2);
           
           if (durationHours > 0) {
             const selectedMentor = mentors.find(m => m.id === updatedForm.userId);

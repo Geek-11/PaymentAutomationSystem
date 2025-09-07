@@ -57,7 +57,6 @@ const GeneratePayoutForm = ({ onSave, onCancel }) => {
             id: doc.id,
             ...doc.data()
           }));
-          
           setFilteredSessions(sessions);
         } catch (error) {
           console.error('Error fetching sessions:', error);
@@ -85,7 +84,6 @@ const GeneratePayoutForm = ({ onSave, onCancel }) => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     if (!selectedMentor || filteredSessions.length === 0) return;
     
     const payout = {
@@ -112,7 +110,6 @@ const GeneratePayoutForm = ({ onSave, onCancel }) => {
       notes,
       status
     };
-    
     onSave(payout);
   };
   

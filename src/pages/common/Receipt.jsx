@@ -19,25 +19,33 @@ const Receipt = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [payout, setPayout] = useState(null);
+  const [mentor, setMentor] = useState(null);
   const [payoutSessions, setPayoutSessions] = useState([]);
 
   useEffect(() => {
     const fetchPayout = async () => {
+      if(!id) return;
       setIsLoading(true);
       try {
         const payoutRef = doc(db, 'payouts', id);
         const payoutDoc = await getDoc(payoutRef);
-
         if (payoutDoc.exists()) {
           const payoutData = { id: payoutDoc.id, ...payoutDoc.data() };
+          console.log(payoutData);
           setPayout(payoutData);
 
           const sessionsRef = collection(db, 'sessions');
-          const q = query(sessionsRef, where('userId', '==', payoutData.mentorId));
+          const q = query(sessionsRef, where('userId', '==', payoutData.userId));
           const querySnapshot = await getDocs(q);
 
           const sessions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           setPayoutSessions(sessions.slice(0, payoutData.sessionsCount));
+
+          const mentorRef = doc(db, 'users', payoutData.userId);
+          const mentorDoc = await getDoc(mentorRef);
+          const mentorData = { id: mentorDoc.id, ...mentorDoc.data() };
+          console.log(mentorData);
+          setMentor(mentorData);
         }
       } catch (error) {
         console.error(error);
@@ -46,8 +54,7 @@ const Receipt = () => {
         setIsLoading(false);
       }
     };
-
-    if (id) fetchPayout();
+    fetchPayout();
   }, [id]);
 
   const handleGoBack = () => navigate(-1);
@@ -86,6 +93,7 @@ const Receipt = () => {
   const subtotal = payoutSessions.reduce((total, session) => total + session.amount, 0);
   const platformFee = subtotal * 0.05;
   const taxAmount = subtotal * 0.18;
+  const totalPayout = subtotal - platformFee - taxAmount;
 
   return (
     <Layout>
@@ -117,7 +125,7 @@ const Receipt = () => {
             <div className="mt-6 md:mt-0 md:text-right">
               <h2 className="text-2xl font-bold mb-2">RECEIPT</h2>
               <p className="text-gray-600 dark:text-gray-300 print:text-gray-600">
-                Receipt #: {payout.id}<br />Date: {formatDate(payout.date)}<br />
+                Receipt #: {payout.id}<br />Date: {formatDate(Date.now())}<br />
                 Status: <span className={payout.status === 'paid' ? 'text-green-600 dark:text-green-400' : payout.status === 'pending' ? 'text-yellow-600 dark:text-yellow-400' : 'text-blue-600 dark:text-blue-400'}>
                   {payout.status.toUpperCase()}
                 </span>
@@ -130,14 +138,14 @@ const Receipt = () => {
           <h3 className="text-lg font-semibold mb-3">Mentor Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p className="font-medium">{payout.mentorName}</p>
+              <p className="font-medium">{mentor.name}</p>
               <p className="text-sm text-gray-600 dark:text-gray-300 print:text-gray-600">
-                Mentor ID: {payout.mentorId}<br />Email: {payout.mentorEmail}<br />Phone: {payout.mentorPhone || 'N/A'}
+                Mentor ID: {mentor.id}<br />Email: {mentor.email}<br />Phone: {mentor.phone || 'N/A'}
               </p>
             </div>
             <div className="md:text-right">
               <p className="text-sm text-gray-600 dark:text-gray-300 print:text-gray-600">
-                Payment Method: Bank Transfer<br />Account: XXXX-XXXX-XXXX-1234<br />Payment Date: {formatDate(payout.date)}
+                Payment Method: Bank Transfer<br />Account: XXXX-XXXX-XXXX-1234<br />Payment Date: {formatDate(new Date())}
               </p>
             </div>
           </div>
@@ -187,7 +195,7 @@ const Receipt = () => {
             </div>
             <div className="flex justify-between py-4 text-lg font-bold">
               <span>Total Payout:</span>
-              <span>{formatCurrency(payout.totalAmount)}</span>
+              <span>{formatCurrency(totalPayout)}</span>
             </div>
           </div>
 

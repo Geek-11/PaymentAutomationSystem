@@ -14,7 +14,7 @@ const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const{payouts:orignalPayout}=usePayout();
 
-  const showTotal= orignalPayout.reduce((sum,curr)=>sum=sum+curr.amount,0)
+  // const showTotal= orignalPayout.reduce((sum,curr)=>sum=sum+curr.amount,0)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,8 +74,7 @@ const AdminDashboard = () => {
   const sessionCount = sessionsThisMonth.length;
   const sessionCountDiff = sessionCount - sessionsLastMonth.length;
   const sessionCountPct = sessionsLastMonth.length ? Math.round(sessionCountDiff / sessionsLastMonth.length * 100) : 100;
-  
-  const totalPayout = payouts.reduce((sum, payout) => sum + payout.totalAmount, 0);
+  const totalPayout = payouts.reduce((sum, payout) => sum + payout.amount, 0);
   const avgSessionRate = sessionsThisMonth.length 
     ? Math.round(sessionsThisMonth.reduce((sum, session) => sum + session.amount, 0) / sessionsThisMonth.length) 
     : 0;
@@ -180,7 +179,7 @@ const AdminDashboard = () => {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Payouts</p>
-              <p className="text-2xl font-bold">{formatCurrency(showTotal)}</p>
+              <p className="text-2xl font-bold">{formatCurrency(totalPayout)}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 For {payouts.length} payouts
               </p>

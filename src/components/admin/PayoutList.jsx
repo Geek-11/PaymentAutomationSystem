@@ -14,9 +14,8 @@ const PayoutList = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const { sessions } = useSessions();
-  
+  console.log(payouts)
   const filteredPayouts = payouts.filter(payout => {
-    console.log(payout);
     
     const matchesSearch = 
       // payout.mentorName
@@ -24,7 +23,7 @@ const PayoutList = ({
       payout.id.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = 
-      statusFilter === 'all' || payout.status === statusFilter;
+      statusFilter === 'all' || payout.status.toLowerCase() === statusFilter;
     
     return matchesSearch && matchesStatus;
   });
